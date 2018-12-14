@@ -200,8 +200,10 @@ public class ClinicServiceTests {
         Pet pet7 = this.pets.findById(7);
         int found = pet7.getVisits().size();
         Visit visit = new Visit();
-        pet7.addVisit(visit);
         visit.setDescription("test");
+        visit.setVeterinarian(vets.findById(1));
+        visit.setCanceled(false);
+        pet7.addVisit(visit);
         this.visits.save(visit);
         this.pets.save(pet7);
 

@@ -19,11 +19,15 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.vet.Vet;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -35,46 +39,77 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 @Table(name = "visits")
 public class Visit extends BaseEntity {
 
-    @Column(name = "visit_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+	@Column(name = "visit_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate date;
 
-    @NotEmpty
-    @Column(name = "description")
-    private String description;
+	@NotEmpty
+	@Column(name = "description")
+	private String description;
 
-    @Column(name = "pet_id")
-    private Integer petId;
+	@Column(name = "pet_id")
+	private Integer petId;
 
-    /**
-     * Creates a new instance of Visit for the current date
-     */
-    public Visit() {
-        this.date = LocalDate.now();
-    }
+	@ManyToOne
+	@JoinColumn(name = "vets_id")
+	private Vet veterinarian;
 
-    public LocalDate getDate() {
-        return this.date;
-    }
+	@Column(name = "canceled")
+	private Boolean canceled;
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+	/**
+	 * Creates a new instance of Visit for the current date
+	 */
+	public Visit() {
+		this.date = LocalDate.now();
+	}
 
-    public String getDescription() {
-        return this.description;
-    }
+	public LocalDate getDate() {
+		return this.date;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 
-    public Integer getPetId() {
-        return this.petId;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-    public void setPetId(Integer petId) {
-        this.petId = petId;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
+	public Integer getPetId() {
+		return this.petId;
+	}
+
+	public void setPetId(Integer petId) {
+		this.petId = petId;
+	}
+
+	public Vet getVeterinarian() {
+		return this.veterinarian;
+	}
+
+	public void setVeterinarian(Vet veterinarian) {
+		this.veterinarian = veterinarian;
+	}
+
+	public Boolean getCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(Boolean canceled) {
+		this.canceled = canceled;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringCreator(this)
+
+				.append("id", this.getId()).append("new", this.isNew()).append("date", this.getDate())
+				.append("description", this.getDescription()).append("petId", this.getPetId())
+				.append("veterinarian", this.getVeterinarian()).append("canceled", this.getCanceled()).toString();
+	}
 }
